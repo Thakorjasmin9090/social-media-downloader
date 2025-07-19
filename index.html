@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialDownloader - Download Videos, Photos & Reels from Any Platform</title>
+    <meta name="description" content="Download high-quality videos, photos, and reels from YouTube, Instagram, Facebook, TikTok, and more. Convert to MP3, no watermarks, completely free.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" style="border-radius: 10px;" href="/favicon/favicon.ico" type="/x-icon">
+    
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="nav-brand">
+                <a href="index.html" class="unline">
+                <span class="lock">Nex
+                <span class="lock2">👀</span>
+                <span class="lock3">YT</span></span></a>
+                  <!-- <img src="/favicon/FEVICON_NEX.png" class="logo" alt=""> -->
+    <!-- <i class="fas fa-download" class="place"></i> -->
+                
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#platforms" class="nav-link">Platforms</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Download Videos & Photos from 
+                    <span class="gradient-text">Any Social Platform</span>
+                </h1>
+                <p class="hero-description">
+                    Download high-quality videos, photos, and reels from YouTube, Instagram, Facebook, TikTok, and more. 
+                    Convert to MP3, no watermarks, completely free.
+                </p>
+                
+                <!-- Download Form -->
+                <div class="download-form">
+                    <div class="url-input-container">
+                        <input type="url" id="urlInput" placeholder="Paste your video or photo URL here..." class="url-input">
+                        <button type="button" id="pasteBtn" class="paste-btn" title="Paste from clipboard">
+                            <i class="fas fa-clipboard"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Platform Selection -->
+                    <div class="platform-selection">
+                        <div class="platform-item" data-platform="youtube">
+                            <i class="fab fa-youtube"></i>
+                            <span>YouTube</span>
+                        </div>
+                        <div class="platform-item" data-platform="instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </div>
+                        <div class="platform-item" data-platform="facebook">
+                            <i class="fab fa-facebook"></i>
+                            <span>Facebook</span>
+                        </div>
+                        <div class="platform-item" data-platform="tiktok">
+                            <i class="fab fa-tiktok"></i>
+                            <span>TikTok</span>
+                        </div>
+                        <div class="platform-item" data-platform="twitter">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </div>
+                        <div class="platform-item" data-platform="linkedin">
+                            <i class="fab fa-linkedin"></i>
+                            <span>LinkedIn</span>
+                        </div>
+                    </div>
+
+                    <!-- Format Selection -->
+                    <div class="format-selection">
+                        <div class="format-group">
+                            <label class="format-label">
+                                <input type="radio" name="format" value="video" checked>
+                                <span class="format-option">
+                                    <i class="fas fa-video"></i>
+                                    Video (MP4)
+                                </span>
+                            </label>
+                            <label class="format-label">
+                                <input type="radio" name="format" value="audio">
+                                <span class="format-option">
+                                    <i class="fas fa-music"></i>
+                                    Audio (MP3)
+                                </span>
+                            </label>
+                        </div>
+                        
+                        <div class="quality-selection">
+                            <label for="quality">Quality:</label>
+                            <select id="quality" class="quality-select">
+                                <option value="best">Best Quality</option>
+                                <option value="1080p">1080p HD</option>
+                                <option value="720p">720p HD</option>
+                                <option value="480p">480p</option>
+                                <option value="360p">360p</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="button" id="downloadBtn" class="download-btn">
+                        <i class="fas fa-download"></i>
+                        Download Now
+                    </button>
+                </div>
+
+                <!-- Features Highlight -->
+                <div class="features-highlight">
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>No Registration</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Fast Processing</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-hd-video"></i>
+                        <span>HD Quality</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-ban"></i>
+                        <span>No Watermarks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose SocialDownloader?</h2>
+                <p class="section-description">
+                    The most comprehensive and reliable social media downloader with advanced features
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3>Multiple Platforms</h3>
+                    <p>Support for 50+ social media platforms including YouTube, Instagram, Facebook, TikTok, Twitter, and more.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Audio Conversion</h3>
+                    <p>Convert any video to high-quality MP3 audio format. Perfect for music and podcast downloads.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>Premium Quality</h3>
+                    <p>Download in original quality up to 4K resolution. No compression, no quality loss.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>Advanced processing algorithms ensure the fastest download speeds possible.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3>100% Secure</h3>
+                    <p>Your privacy is our priority. No data stored, no tracking, completely anonymous.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Friendly</h3>
+                    <p>Works perfectly on all devices - desktop, tablet, and mobile. Responsive design.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">How It Works</h2>
+                <p class="section-description">
+                    Download your favorite content in just 3 simple steps
+                </p>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Paste URL</h3>
+                        <p>Copy the link of the video or photo you want to download and paste it in the input field above.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Choose Format</h3>
+                        <p>Select your preferred format (video or audio) and quality. We support all popular formats.</p>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Download</h3>
+                        <p>Click the download button and get your file instantly. No waiting, no ads, no registration.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Platforms Section -->
+    <section id="platforms" class="platforms">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Supported Platforms</h2>
+                <p class="section-description">
+                    Download from all major social media platforms and video sharing sites
+                </p>
+            </div>
+            
+            <div class="platforms-grid">
+                <div class="platform-card">
+                    <i class="fab fa-youtube"></i>
+                    <h4>YouTube</h4>
+                    <p>Videos, Shorts, Music</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-instagram"></i>
+                    <h4>Instagram</h4>
+                    <p>Posts, Stories, Reels, IGTV</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-facebook"></i>
+                    <h4>Facebook</h4>
+                    <p>Videos, Photos, Stories</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-tiktok"></i>
+                    <h4>TikTok</h4>
+                    <p>Videos, No Watermark</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-twitter"></i>
+                    <h4>Twitter</h4>
+                    <p>Videos, GIFs, Photos</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-linkedin"></i>
+                    <h4>LinkedIn</h4>
+                    <p>Videos, Posts</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-pinterest"></i>
+                    <h4>Pinterest</h4>
+                    <p>Images, Videos</p>
+                </div>
+                
+                <div class="platform-card">
+                    <i class="fab fa-vimeo"></i>
+                    <h4>Vimeo</h4>
+                    <p>HD Videos</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+            </div>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Is this service completely free?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Our service is completely free to use. No hidden fees, no premium subscriptions, no registration required.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>What video quality can I download?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We support all available qualities from 360p up to 4K (2160p), depending on the original video quality. You can choose your preferred quality before downloading.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Can I convert videos to MP3?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! You can convert any video to high-quality MP3 audio format. Perfect for downloading music, podcasts, or any audio content.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Is it legal to download videos?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You should only download content that you have permission to download or that is in the public domain. Always respect copyright laws and the platform's terms of service.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Do you store my downloaded files?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>No, we don't store any files on our servers. All downloads are processed in real-time and delivered directly to your device.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-description">
+                    Have questions or need support? We're here to help!
+                </p>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Support</h4>
+                            <p>support@socialdownloader.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Response Time</h4>
+                            <p>Usually within 24 hours</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <h4>Privacy</h4>
+                            <p>Your data is safe with us</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <select required>
+                            <option value="">Select Subject</option>
+                            <option value="support">Technical Support</option>
+                            <option value="feature">Feature Request</option>
+                            <option value="bug">Bug Report</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <i class="fas fa-download"></i>
+                        <span>SocialDownloader</span>
+                    </div>
+                    <p>The most reliable and feature-rich social media downloader. Download videos, photos, and audio from any platform.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#platforms">Platforms</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 SocialDownloader. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content">
+            <div class="loading-spinner"></div>
+            <h3>Processing your request...</h3>
+            <p>Please wait while we fetch your content.</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="resultContent">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+
