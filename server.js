@@ -27,17 +27,26 @@ app.use((req, res, next) => {
     next();
 });
 
-// Create downloads directory
+// Create downloads directory with error handling
 const downloadsDir = path.join(__dirname, 'downloads');
-fs.ensureDirSync(downloadsDir);
+try {
+    fs.ensureDirSync(downloadsDir);
+    console.log('Downloads directory created/verified:', downloadsDir);
+} catch (error) {
+    console.error('Failed to create downloads directory:', error.message);
+    // Continue without failing - directory might be created later
+}
 
 // Clean up old files (older than 1 hour)
 const cleanupOldFiles = async () => {
-    const oneHourAgo = Date.now() - (60 * 60 * 1000);
-    let cleanedCount = 0;
-    let errorCount = 0;
-    
     try {
+        // Ensure downloads directory exists first
+        await fs.ensureDir(downloadsDir);
+        
+        const oneHourAgo = Date.now() - (60 * 60 * 1000);
+        let cleanedCount = 0;
+        let errorCount = 0;
+        
         // Read directory contents
         const files = await fs.readdir(downloadsDir);
         
@@ -89,6 +98,7 @@ const cleanupOldFiles = async () => {
         
     } catch (error) {
         console.error('Cleanup: Failed to read downloads directory:', error.message);
+        // Don't throw error - just log it
     }
 };
 
@@ -486,15 +496,43 @@ app.use((req, res) => {
     });
 });
 
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
+// Start server with error handling
+const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Social Media Downloader Backend running on port ${PORT}`);
     console.log(`Frontend available at: http://localhost:${PORT}`);
     console.log(`API available at: http://localhost:${PORT}/api`);
     
-    // Initial cleanup with error handling
-    cleanupOldFiles().catch(error => {
-        console.error('Initial cleanup failed:', error.message);
+    // Initial cleanup with error handling - run after a delay
+    setTimeout(() => {
+        cleanupOldFiles().catch(error => {
+            console.error('Initial cleanup failed:', error.message);
+        });
+    }, 5000); // Wait 5 seconds before first cleanup
+});
+
+// Handle server errors
+server.on('error', (error) => {
+    console.error('Server error:', error);
+    if (error.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use`);
+        process.exit(1);
+    }
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received, shutting down gracefully');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT received, shutting down gracefully');
+    server.close(() => {
+        console.log('Server closed');
+        process.exit(0);
     });
 });
 
