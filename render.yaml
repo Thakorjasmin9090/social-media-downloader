@@ -3,7 +3,10 @@ services:
     name: social-media-downloader
     env: node
     plan: free
-    buildCommand: npm install
+    buildCommand: |
+      npm install
+      pip3 install --upgrade yt-dlp
+      yt-dlp --version
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -13,6 +16,8 @@ services:
           type: web
           name: social-media-downloader
           property: port
+      - key: PATH
+        value: /opt/render/project/src/.venv/bin:/usr/local/bin:/usr/bin:/bin
     healthCheckPath: /api/health
     autoDeploy: true
     branch: main

@@ -112,8 +112,43 @@ const detectPlatform = (url) => {
 // Helper function to get video info
 const getVideoInfo = async (url) => {
     try {
-        const command = `yt-dlp --dump-json "${url}"`;
-        const { stdout } = await execAsync(command);
+        // Try different yt-dlp paths
+        const ytdlpPaths = [
+            'yt-dlp',
+            '/usr/local/bin/yt-dlp',
+            '/usr/bin/yt-dlp',
+            'python3 -m yt_dlp'
+        ];
+        
+        let command = null;
+        let lastError = null;
+        
+        // Test which yt-dlp path works
+        for (const ytdlpPath of ytdlpPaths) {
+            try {
+                await execAsync(`${ytdlpPath} --version`, { timeout: 5000 });
+                command = `${ytdlpPath} --dump-json "${url}"`;
+                console.log(`Using yt-dlp path: ${ytdlpPath}`);
+                break;
+            } catch (err) {
+                lastError = err;
+                console.log(`Failed to use ${ytdlpPath}:`, err.message);
+                continue;
+            }
+        }
+        
+        if (!command) {
+            console.error('yt-dlp not found in any expected location');
+            throw new Error('yt-dlp is not installed or not accessible. Please check the deployment configuration.');
+        }
+        
+        console.log('Executing command:', command);
+        const { stdout, stderr } = await execAsync(command, { timeout: 30000 });
+        
+        if (stderr) {
+            console.log('yt-dlp stderr:', stderr);
+        }
+        
         const info = JSON.parse(stdout);
         
         return {
@@ -126,7 +161,21 @@ const getVideoInfo = async (url) => {
         };
     } catch (error) {
         console.error('Error getting video info:', error);
-        throw new Error('Failed to get video information');
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            signal: error.signal
+        });
+        
+        if (error.message.includes('yt-dlp')) {
+            throw new Error('yt-dlp is not properly installed. Please redeploy the application.');
+        } else if (error.code === 'ETIMEDOUT') {
+            throw new Error('Request timed out. The video might be too large or the server is busy.');
+        } else if (error.message.includes('Unsupported URL')) {
+            throw new Error('This URL is not supported. Please check the URL and try again.');
+        } else {
+            throw new Error('Failed to get video information. Please check the URL and try again.');
+        }
     }
 };
 
@@ -223,8 +272,33 @@ app.post('/api/download', async (req, res) => {
         const filename = generateFilename(info.title, format);
         const outputPath = path.join(downloadsDir, filename);
         
+        // Find working yt-dlp path (same as in getVideoInfo)
+        const ytdlpPaths = [
+            'yt-dlp',
+            '/usr/local/bin/yt-dlp',
+            '/usr/bin/yt-dlp',
+            'python3 -m yt_dlp'
+        ];
+        
+        let ytdlpCommand = null;
+        
+        for (const ytdlpPath of ytdlpPaths) {
+            try {
+                await execAsync(`${ytdlpPath} --version`, { timeout: 5000 });
+                ytdlpCommand = ytdlpPath;
+                console.log(`Using yt-dlp path for download: ${ytdlpPath}`);
+                break;
+            } catch (err) {
+                continue;
+            }
+        }
+        
+        if (!ytdlpCommand) {
+            throw new Error('yt-dlp is not installed or not accessible');
+        }
+        
         // Build yt-dlp command
-        let command = 'yt-dlp';
+        let command = ytdlpCommand;
         
         if (format === 'audio') {
             // Extract audio and convert to MP3
@@ -337,7 +411,31 @@ app.get('/api/file/:filename', async (req, res) => {
 // API endpoint to check supported sites
 app.get('/api/supported-sites', async (req, res) => {
     try {
-        const { stdout } = await execAsync('yt-dlp --list-extractors');
+        // Find working yt-dlp path
+        const ytdlpPaths = [
+            'yt-dlp',
+            '/usr/local/bin/yt-dlp',
+            '/usr/bin/yt-dlp',
+            'python3 -m yt_dlp'
+        ];
+        
+        let ytdlpCommand = null;
+        
+        for (const ytdlpPath of ytdlpPaths) {
+            try {
+                await execAsync(`${ytdlpPath} --version`, { timeout: 5000 });
+                ytdlpCommand = ytdlpPath;
+                break;
+            } catch (err) {
+                continue;
+            }
+        }
+        
+        if (!ytdlpCommand) {
+            throw new Error('yt-dlp is not installed or not accessible');
+        }
+        
+        const { stdout } = await execAsync(`${ytdlpCommand} --list-extractors`);
         const extractors = stdout.split('\n').filter(line => line.trim());
         
         res.json({
