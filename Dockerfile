@@ -11,17 +11,12 @@ COPY package*.json ./
 # Install npm dependencies
 RUN npm install
 
-# Copy public files to root level (where server.js expects them)
-COPY public/* ./
+# Copy all files
+COPY . .
 
-# Copy server.js to backend directory
-RUN mkdir -p backend
-COPY server.js backend/
-COPY README.md ./
-
-# Set working directory to backend for running the server
-WORKDIR /app/backend
+# Create downloads directory
+RUN mkdir -p downloads
 
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["npm", "start"]
