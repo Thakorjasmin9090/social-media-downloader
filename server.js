@@ -21,6 +21,12 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the public directory (frontend)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Debug middleware to log requests
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+    next();
+});
+
 // Create downloads directory
 const downloadsDir = path.join(__dirname, 'downloads');
 fs.ensureDirSync(downloadsDir);
