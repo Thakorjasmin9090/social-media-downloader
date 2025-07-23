@@ -1,15 +1,14 @@
-FROM node:18 
+FROM node:18
 
-pip3 install yt-dlp
-RUN apt install -y ffmpeg && \ apt install -y libavcodec-extra
+RUN apt update && apt install -y python3 python3-pip && pip3 install yt-dlp
+RUN apt install -y ffmpeg && apt install -y libavcodec-extra
 
-WORKDIR /app 
-
+WORKDIR /app
 
 COPY . .
 
-RUN npm install 
+RUN npm install
 
 EXPOSE 3000
 
-CMD ["node" , "start"]
+CMD ["npm", "start"]
