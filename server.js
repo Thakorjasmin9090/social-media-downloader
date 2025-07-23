@@ -131,6 +131,7 @@ const getVideoInfo = async (url) => {
         // Try different yt-dlp paths
         const ytdlpPaths = [
             'yt-dlp',
+            '/usr/local/bin/yt-dlp-wrapper',
             '/usr/local/bin/yt-dlp',
             '/usr/bin/yt-dlp',
             'python3 -m yt_dlp'
@@ -291,6 +292,7 @@ app.post('/api/download', async (req, res) => {
         // Find working yt-dlp path (same as in getVideoInfo)
         const ytdlpPaths = [
             'yt-dlp',
+            '/usr/local/bin/yt-dlp-wrapper',
             '/usr/local/bin/yt-dlp',
             '/usr/bin/yt-dlp',
             'python3 -m yt_dlp'
@@ -430,6 +432,7 @@ app.get('/api/supported-sites', async (req, res) => {
         // Find working yt-dlp path
         const ytdlpPaths = [
             'yt-dlp',
+            '/usr/local/bin/yt-dlp-wrapper',
             '/usr/local/bin/yt-dlp',
             '/usr/bin/yt-dlp',
             'python3 -m yt_dlp'
