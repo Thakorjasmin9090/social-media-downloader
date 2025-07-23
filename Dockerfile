@@ -1,8 +1,7 @@
 FROM node:18 
 
-RUN apt update && \ apt install -y 
-python3 python3-pip && \ pip3 install yt-dlp
-# RUN apt install -y ffmpeg && \ apt install -y libavcodec-extra
+pip3 install yt-dlp
+RUN apt install -y ffmpeg && \ apt install -y libavcodec-extra
 
 WORKDIR /app 
 
