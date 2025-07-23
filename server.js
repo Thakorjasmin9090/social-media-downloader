@@ -18,31 +18,72 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from the parent directory (frontend)
-app.use(express.static(path.join(__dirname, '..')));
+// Serve static files from the public directory (frontend)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Create downloads directory
 const downloadsDir = path.join(__dirname, 'downloads');
 fs.ensureDirSync(downloadsDir);
 
 // Clean up old files (older than 1 hour)
-const cleanupOldFiles = () => {
+const cleanupOldFiles = async () => {
     const oneHourAgo = Date.now() - (60 * 60 * 1000);
+    let cleanedCount = 0;
+    let errorCount = 0;
     
-    fs.readdir(downloadsDir, (err, files) => {
-        if (err) return;
+    try {
+        // Read directory contents
+        const files = await fs.readdir(downloadsDir);
         
-        files.forEach(file => {
-            const filePath = path.join(downloadsDir, file);
-            fs.stat(filePath, (err, stats) => {
-                if (err) return;
+        if (files.length === 0) {
+            console.log('Cleanup: No files to process');
+            return;
+        }
+        
+        console.log(`Cleanup: Processing ${files.length} files`);
+        
+        // Process files in parallel with concurrency limit
+        const BATCH_SIZE = 10; // Process 10 files at a time
+        const batches = [];
+        
+        for (let i = 0; i < files.length; i += BATCH_SIZE) {
+            batches.push(files.slice(i, i + BATCH_SIZE));
+        }
+        
+        for (const batch of batches) {
+            const promises = batch.map(async (file) => {
+                const filePath = path.join(downloadsDir, file);
                 
-                if (stats.mtime.getTime() < oneHourAgo) {
-                    fs.unlink(filePath, () => {});
+                try {
+                    // Get file stats
+                    const stats = await fs.stat(filePath);
+                    
+                    // Check if file is older than threshold
+                    if (stats.mtime.getTime() < oneHourAgo) {
+                        await fs.unlink(filePath);
+                        cleanedCount++;
+                        console.log(`Cleanup: Removed old file - ${file}`);
+                    }
+                } catch (error) {
+                    errorCount++;
+                    // Log specific errors but don't stop the cleanup process
+                    if (error.code === 'ENOENT') {
+                        console.log(`Cleanup: File already deleted - ${file}`);
+                    } else {
+                        console.error(`Cleanup: Error processing ${file}:`, error.message);
+                    }
                 }
             });
-        });
-    });
+            
+            // Wait for current batch to complete before processing next batch
+            await Promise.allSettled(promises);
+        }
+        
+        console.log(`Cleanup completed: ${cleanedCount} files removed, ${errorCount} errors`);
+        
+    } catch (error) {
+        console.error('Cleanup: Failed to read downloads directory:', error.message);
+    }
 };
 
 // Clean up every 30 minutes
@@ -132,7 +173,7 @@ const getFileSize = (filePath) => {
 
 // Serve the main page
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // API endpoint to get video information
@@ -215,7 +256,8 @@ app.post('/api/download', async (req, res) => {
         });
         
         // Check if file was created
-        const actualFiles = fs.readdirSync(downloadsDir).filter(file => 
+        const allFiles = await fs.readdir(downloadsDir);
+        const actualFiles = allFiles.filter(file =>
             file.startsWith(path.parse(filename).name)
         );
         
@@ -249,12 +291,14 @@ app.post('/api/download', async (req, res) => {
 });
 
 // API endpoint to serve downloaded files
-app.get('/api/file/:filename', (req, res) => {
+app.get('/api/file/:filename', async (req, res) => {
     try {
         const filename = req.params.filename;
         const filePath = path.join(downloadsDir, filename);
         
-        if (!fs.existsSync(filePath)) {
+        try {
+            await fs.access(filePath);
+        } catch (error) {
             return res.status(404).json({
                 success: false,
                 error: 'File not found'
@@ -271,8 +315,13 @@ app.get('/api/file/:filename', (req, res) => {
         
         // Clean up file after download (optional)
         fileStream.on('end', () => {
-            setTimeout(() => {
-                fs.unlink(filePath, () => {});
+            setTimeout(async () => {
+                try {
+                    await fs.unlink(filePath);
+                    console.log(`Cleaned up downloaded file: ${filename}`);
+                } catch (error) {
+                    console.error(`Failed to cleanup file ${filename}:`, error.message);
+                }
             }, 60000); // Delete after 1 minute
         });
         
@@ -339,8 +388,10 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Frontend available at: http://localhost:${PORT}`);
     console.log(`API available at: http://localhost:${PORT}/api`);
     
-    // Initial cleanup
-    cleanupOldFiles();
+    // Initial cleanup with error handling
+    cleanupOldFiles().catch(error => {
+        console.error('Initial cleanup failed:', error.message);
+    });
 });
 
 module.exports = app;
